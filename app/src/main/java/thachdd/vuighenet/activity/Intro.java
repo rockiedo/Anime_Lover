@@ -23,7 +23,7 @@ public class Intro extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Intro.this, FullscreenActivity.class);
+                Intent intent = new Intent(Intro.this, Main.class);
                 startActivity(intent);
                 finish();
             }

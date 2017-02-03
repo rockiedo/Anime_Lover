@@ -32,11 +32,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="thachdd.vuighenet.activity.Main" />
         </activity>
-        <activity
-            android:name=".activity.FullscreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_fullscreen"
-            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

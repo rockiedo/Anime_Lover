@@ -9,19 +9,21 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import thachdd.vuighenet.R;
 import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 
-public class Main extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private final int INTERNET_PERMISSION_CODE = 1111;
 
     private Toolbar mToolbar = null;
@@ -37,14 +39,31 @@ public class Main extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         mRecycler = (RecyclerView) findViewById(R.id.main_recycler);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecycler.setLayoutManager(layoutManager);
+        mRecycler.setItemAnimator(new DefaultItemAnimator());
+        mRecycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         checkPermission();
     }
 
     public void onClick(View v) {
-        Intent intent = new Intent(this, Player.class);
+        Intent intent = new Intent(this, PlayerActivity.class);
         startActivity(intent);
     }
 

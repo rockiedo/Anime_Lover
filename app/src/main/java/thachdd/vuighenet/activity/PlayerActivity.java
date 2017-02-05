@@ -12,7 +12,7 @@ import android.widget.VideoView;
 
 import thachdd.vuighenet.R;
 
-public class Player extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity {
     private final String sampleUrl = "https://redirector.googlevideo.com/videoplayback?id=2ec476660f13d369&itag=59&source=webdrive&requiressl=yes&ttl=transient&mm=30&mn=sn-i3b7kne7&ms=nxu&mv=u&nh=IgpwZjAxLmhrZzA4KhgyMDAxOjQ4NjA6MToxOjA6NDdlMzowOjk&pl=39&mime=video/mp4&lmt=1484800963645929&mt=1486101354&ip=2405:4800:201:dc5e:862b:2bff:fe72:3aab&ipbits=0&expire=1486115957&sparams=ip%2Cipbits%2Cexpire%2Cid%2Citag%2Csource%2Crequiressl%2Cttl%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cmime%2Clmt&signature=904DCF18F033FDE01C29CFDFA18AF069836CD1E4.92F0A8A11C74A53A520B3AFD59F6772D0A4609B7&key=ck2&app=explorer&title=[VuiGhe.Net] Vua Hai Tac - Tap 48-(480p)";
 
     private VideoView mVideoView = null;

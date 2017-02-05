@@ -36,6 +36,10 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_recycler_item, parent, false);
+        ImageView img = (ImageView) itemView.findViewById(R.id.main_recycler_item_thumbnail);
+        int w = img.getWidth();
+        int h = (int) 1.0 * w / 16 * 9;
+        img.setMinimumHeight(h);
 
         return new MyViewHolder(itemView);
     }

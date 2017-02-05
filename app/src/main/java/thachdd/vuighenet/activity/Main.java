@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,11 +19,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import thachdd.vuighenet.R;
+import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 
 public class Main extends AppCompatActivity {
     private final int INTERNET_PERMISSION_CODE = 1111;
 
     private Toolbar mToolbar = null;
+    private RecyclerView mRecycler = null;
     private boolean mHavePermission = false;
 
     @Override
@@ -32,12 +36,21 @@ public class Main extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
 
+        mRecycler = (RecyclerView) findViewById(R.id.main_recycler);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        mRecycler.setLayoutManager(layoutManager);
+
         checkPermission();
     }
 
     public void onClick(View v) {
         Intent intent = new Intent(this, Player.class);
         startActivity(intent);
+    }
+
+    public void initRecycler() {
+        MainRecyclerAdapter adapter = new MainRecyclerAdapter();
+        mRecycler.setAdapter(adapter);
     }
 
     @Override
@@ -67,6 +80,7 @@ public class Main extends AppCompatActivity {
         }
         else {
             mHavePermission = true;
+            initRecycler();
         }
     }
 
@@ -108,6 +122,7 @@ public class Main extends AppCompatActivity {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     mHavePermission = true;
+                    initRecycler();
 
                 } else {
                     Toast.makeText(this, "Cannot access the internet", Toast.LENGTH_LONG).show();

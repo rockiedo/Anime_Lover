@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/main_recycler_item_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="135dp"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:background="#32212121"
+                android:src="@drawable/thumb"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/main_recycler_item_thumbnail"
+                android:layout_centerVertical="true"
+                android:layout_margin="16dp">
+
+                <TextView
+                    android:id="@+id/main_recycler_item_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vua hai tac"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/main_recycler_item_views"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1000 views"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+    
+</RelativeLayout>

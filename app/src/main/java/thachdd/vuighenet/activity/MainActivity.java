@@ -18,17 +18,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
+import retrofit2.Call;
 import thachdd.vuighenet.R;
 import thachdd.vuighenet.adapter.MainRecyclerAdapter;
+import thachdd.vuighenet.api_client.ApiClient;
+import thachdd.vuighenet.api_client.ApiInterface;
+import thachdd.vuighenet.api_client.SeasonsCallback;
+import thachdd.vuighenet.model.SeasonsResponse;
 
 public class MainActivity extends AppCompatActivity {
-    private final int INTERNET_PERMISSION_CODE = 1111;
-
     private Toolbar mToolbar = null;
     private RecyclerView mRecycler = null;
-    private boolean mHavePermission = false;
+    private AVLoadingIndicatorView mLoading = null;
+    private RelativeLayout mLoadingContainer = null;
+
+    private SeasonsCallback mSeasonsCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        checkPermission();
-    }
-
-    public void onClick(View v) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        startActivity(intent);
-    }
-
-    public void initRecycler() {
         MainRecyclerAdapter adapter = new MainRecyclerAdapter();
         mRecycler.setAdapter(adapter);
+
+        mLoadingContainer = (RelativeLayout) findViewById(R.id.main_loading_container);
+
+        mLoading = (AVLoadingIndicatorView) findViewById(R.id.main_loading);
+        mLoading.show();
     }
 
     @Override
@@ -90,71 +94,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void checkPermission() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET);
+    public void onClick(View v) {
+        Intent intent = new Intent(this, PlayerActivity.class);
+        startActivity(intent);
+    }
 
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            requestPermission();
+    public void showLoading(boolean mode) {
+        if (mode) {
+            mLoading.show();
+            mLoadingContainer.setVisibility(View.VISIBLE);
         }
         else {
-            mHavePermission = true;
-            initRecycler();
+            mLoading.hide();
+            mLoadingContainer.setVisibility(View.GONE);
         }
     }
 
-    private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.INTERNET)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.INTERNET},
-                        INTERNET_PERMISSION_CODE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
+    public void loadSeasons() {
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
+        mSeasonsCallback = new SeasonsCallback(this);
+        api.getSeasons().enqueue(mSeasonsCallback);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case INTERNET_PERMISSION_CODE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    mHavePermission = true;
-                    initRecycler();
+    public void onSeasonsLoaded(SeasonsResponse response) {
 
-                } else {
-                    Toast.makeText(this, "Cannot access the internet", Toast.LENGTH_LONG).show();
-                    finish();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
+    }
 
-                break;
-            }
+    public void loadEpisodes(int seasonId) {
 
-            default:
-                break;
-        }
     }
 }

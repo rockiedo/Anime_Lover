@@ -1,9 +1,6 @@
 package thachdd.vuighenet.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +11,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.http.Url;
 import thachdd.vuighenet.R;
 import thachdd.vuighenet.model.EpisodeDetail;
 
@@ -81,29 +73,26 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         int w = img.getWidth();
         int h = (int) 1.0 * w / 16 * 9;
         img.setMinimumHeight(h);
+        img.setMaxHeight(h);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Log.d("mylog", mEpisodes.get(position).getFullName());
+        EpisodeDetail episode = mEpisodes.get(position);
 
-        holder.mViews.setText("" + mEpisodes.get(position).getViews() + " views");
-        holder.mTitle.setText(mEpisodes.get(position).getFullName());
+        String title = episode.getFullName();
+        String views = "" + episode.getViews() + " views";
+        Log.d("mylog", title);
+
+        holder.mViews.setText(views);
+        holder.mTitle.setText(title);
 
         Activity activity = weakReference.get();
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-            Picasso.with(activity.getApplicationContext()).load(mEpisodes.get(position).getThumbnail()).into(holder.mImageView);
+            Picasso.with(activity.getApplicationContext()).load(episode.getThumbnail()).into(holder.mImageView);
         }
-
-//        try {
-//            Uri uri = Uri.parse(mEpisodes.get(position).getThumbnail());
-//            holder.mImageView.setImageURI(uri);
-//        }
-//        catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     @Override

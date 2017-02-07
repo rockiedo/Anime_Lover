@@ -11,7 +11,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +30,7 @@ import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.ApiInterface;
 import thachdd.vuighenet.api_client.EpisodesCallback;
 import thachdd.vuighenet.api_client.SeasonsCallback;
+import thachdd.vuighenet.listener.RecyclerItemClickedListener;
 import thachdd.vuighenet.model.EpisodeDetail;
 import thachdd.vuighenet.model.EpisodesResponse;
 import thachdd.vuighenet.model.SeasonDetail;
@@ -62,25 +62,20 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecycler.setLayoutManager(layoutManager);
         mRecycler.setItemAnimator(new DefaultItemAnimator());
-        mRecycler.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
-        });
 
         mAdapter = new MainRecyclerAdapter(this);
         mRecycler.setAdapter(mAdapter);
+        mRecycler.addOnItemTouchListener(new RecyclerItemClickedListener(this,
+                new RecyclerItemClickedListener.OnItemClickedListener() {
+                    @Override
+                    public void onItemClicked(View v, int postion) {
+                        int id = mAdapter.getPlayerId(postion);
+
+                        Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                        intent.putExtra("playerId", id);
+                        startActivity(intent);
+                    }
+                }));
 
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

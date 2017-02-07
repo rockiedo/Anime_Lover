@@ -15,7 +15,7 @@ import thachdd.vuighenet.model.EpisodesResponse;
  */
 
 public class EpisodesCallback implements Callback<EpisodesResponse> {
-    private WeakReference<Activity> weakReference;
+    private final WeakReference<Activity> weakReference;
 
     public EpisodesCallback(Activity activity) {
         weakReference = new WeakReference<Activity>(activity);

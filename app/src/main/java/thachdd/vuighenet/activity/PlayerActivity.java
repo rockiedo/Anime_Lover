@@ -6,17 +6,30 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import thachdd.vuighenet.R;
+import thachdd.vuighenet.api_client.ApiClient;
+import thachdd.vuighenet.api_client.ApiInterface;
+import thachdd.vuighenet.api_client.PlayerCallback;
+import thachdd.vuighenet.model.PlayerResponse;
 
 public class PlayerActivity extends AppCompatActivity {
-    private final String sampleUrl = "https://redirector.googlevideo.com/videoplayback?id=2ec476660f13d369&itag=59&source=webdrive&requiressl=yes&ttl=transient&mm=30&mn=sn-i3b7kne7&ms=nxu&mv=u&nh=IgpwZjAxLmhrZzA4KhgyMDAxOjQ4NjA6MToxOjA6NDdlMzowOjk&pl=39&mime=video/mp4&lmt=1484800963645929&mt=1486101354&ip=2405:4800:201:dc5e:862b:2bff:fe72:3aab&ipbits=0&expire=1486115957&sparams=ip%2Cipbits%2Cexpire%2Cid%2Citag%2Csource%2Crequiressl%2Cttl%2Cmm%2Cmn%2Cms%2Cmv%2Cnh%2Cpl%2Cmime%2Clmt&signature=904DCF18F033FDE01C29CFDFA18AF069836CD1E4.92F0A8A11C74A53A520B3AFD59F6772D0A4609B7&key=ck2&app=explorer&title=[VuiGhe.Net] Vua Hai Tac - Tap 48-(480p)";
-
     private VideoView mVideoView = null;
     private MediaController mVideoCtrl = null;
     private View mToolbar = null;
+
+    private RelativeLayout mLoadingContainer = null;
+    private AVLoadingIndicatorView mLoading = null;
+
+    private PlayerCallback mPlayerCallback = null;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -45,7 +58,12 @@ public class PlayerActivity extends AppCompatActivity {
 
         mToolbar = findViewById(R.id.player_toolbar);
 
-        loadVideo();
+        mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
+        mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
+
+        showLoading(true);
+        int id = getIntent().getIntExtra("playerId", 0);
+        loadVideo(id);
     }
 
     public void playerOnClick(View v) {
@@ -79,9 +97,51 @@ public class PlayerActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 
-    private void loadVideo() {
-        Uri uri = Uri.parse(sampleUrl);
-        mVideoView.setVideoURI(uri);
+    public void loadVideo(int id) {
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
+        mPlayerCallback = new PlayerCallback(this);
+        api.getPlayer(id).enqueue(mPlayerCallback);
+    }
+
+    public void onPlayerLoadedSuccessfully(PlayerResponse response) {
+        String url = response.getSources().getData().get(1).getLink();
+        Uri uri = Uri.parse(url);
+
+        mVideoView.setVideoURI(uri, fakeHeader());
+
+        showLoading(false);
+
         mVideoView.start();
+    }
+
+    public void onPlayerLoadedFailed() {
+        Toast.makeText(this, "Khong the tai video", Toast.LENGTH_LONG).show();
+        showLoading(false);
+        finish();
+    }
+
+    public void showLoading(boolean mode) {
+        if (mode) {
+            mLoading.show();
+            mLoadingContainer.setVisibility(View.VISIBLE);
+        }
+        else {
+            mLoading.hide();
+            mLoadingContainer.setVisibility(View.GONE);
+        }
+    }
+
+    public Map<String, String> fakeHeader() {
+        Map<String, String> header = new HashMap<>();
+
+        header.put("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0");
+        header.put("Host", "r5---sn-i3b7kn7z.googlevideo.com");
+        header.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+        header.put("Accept-Language", "en-US,en;q=0.5");
+        header.put("Accept-Encoding", "gzip, deflate, br");
+        header.put("Connection", "keep-alive");
+        header.put("Upgrade-Insecure-Request", "1");
+
+        return header;
     }
 }

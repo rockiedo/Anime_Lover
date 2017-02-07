@@ -1,5 +1,6 @@
 package thachdd.vuighenet.adapter;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -28,12 +32,15 @@ import thachdd.vuighenet.model.EpisodeDetail;
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MyViewHolder> {
     private List<EpisodeDetail> mEpisodes;
+    private WeakReference<Activity> weakReference;
 
-    public MainRecyclerAdapter() {
+    public MainRecyclerAdapter(Activity activity) {
+        weakReference = new WeakReference<Activity>(activity);
         mEpisodes = new ArrayList<>();
     }
 
-    public MainRecyclerAdapter(List<EpisodeDetail> episodes) {
+    public MainRecyclerAdapter(Activity activity, List<EpisodeDetail> episodes) {
+        weakReference = new WeakReference<Activity>(activity);
         mEpisodes = episodes;
     }
 
@@ -83,9 +90,12 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         Log.d("mylog", mEpisodes.get(position).getFullName());
 
         holder.mViews.setText("" + mEpisodes.get(position).getViews() + " views");
+        holder.mTitle.setText(mEpisodes.get(position).getFullName());
 
-        final String str = mEpisodes.get(position).getFullName();
-        holder.mTitle.setText(str);
+        Activity activity = weakReference.get();
+        if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+            Picasso.with(activity.getApplicationContext()).load(mEpisodes.get(position).getThumbnail()).into(holder.mImageView);
+        }
 
 //        try {
 //            Uri uri = Uri.parse(mEpisodes.get(position).getThumbnail());

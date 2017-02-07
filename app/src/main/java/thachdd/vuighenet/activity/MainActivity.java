@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAdapter = new MainRecyclerAdapter();
+        mAdapter = new MainRecyclerAdapter(this);
         mRecycler.setAdapter(mAdapter);
 
         mSpinner = (Spinner) findViewById(R.id.main_spinner);

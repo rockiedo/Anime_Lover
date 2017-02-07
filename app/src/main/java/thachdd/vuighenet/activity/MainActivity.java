@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -28,7 +29,10 @@ import thachdd.vuighenet.R;
 import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.ApiInterface;
+import thachdd.vuighenet.api_client.EpisodesCallback;
 import thachdd.vuighenet.api_client.SeasonsCallback;
+import thachdd.vuighenet.model.EpisodeDetail;
+import thachdd.vuighenet.model.EpisodesResponse;
 import thachdd.vuighenet.model.SeasonDetail;
 import thachdd.vuighenet.model.SeasonsResponse;
 
@@ -40,8 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private Spinner mSpinner = null;
 
     private SeasonsCallback mSeasonsCallback = null;
-    private SeasonDetail mCurrentSeason = null;
-    private List<SeasonDetail> mSeasons = null;
+    private List<SeasonDetail> mSeasons =  new ArrayList<>();
+    private EpisodesCallback mEpisodesCallback = null;
+    private List<EpisodeDetail> mEpisodes = new ArrayList<>();
+
+    private MainRecyclerAdapter mAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +78,22 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        MainRecyclerAdapter adapter = new MainRecyclerAdapter();
-        mRecycler.setAdapter(adapter);
+
+        mAdapter = new MainRecyclerAdapter();
+        mRecycler.setAdapter(mAdapter);
 
         mSpinner = (Spinner) findViewById(R.id.main_spinner);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                loadEpisodes(mSeasons.get(position).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         try {
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
@@ -130,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadSeasons() {
+        showLoading(true);
+
         ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
         mSeasonsCallback = new SeasonsCallback(this);
         api.getSeasons().enqueue(mSeasonsCallback);
@@ -137,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSeasonsLoadedSuccessfully(SeasonsResponse response) {
         mSeasons = response.getSeasonsDetail();
-        mCurrentSeason = mSeasons.get(0);
 
         ArrayList<String> spinnerData = new ArrayList<>();
         for (SeasonDetail season : mSeasons) {
@@ -160,6 +180,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadEpisodes(int seasonId) {
+        showLoading(true);
 
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
+        mEpisodesCallback = new EpisodesCallback(this);
+        api.getEpisodes(seasonId).enqueue(mEpisodesCallback);
+    }
+
+    public void onEpisodesLoadedSuccessfully(EpisodesResponse response) {
+        mAdapter.setEpisodes(response.getEpisodesDetail());
+        mAdapter.notifyDataSetChanged();
+
+        showLoading(false);
+    }
+
+    public void onEpisodesLoadedFailed() {
+        mLoading.hide();
+        Toast.makeText(this, "Khong the tai duoc du lieu", Toast.LENGTH_LONG).show();
+        finish();
     }
 }

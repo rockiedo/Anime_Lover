@@ -1,23 +1,57 @@
 package thachdd.vuighenet.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.http.Url;
 import thachdd.vuighenet.R;
-import thachdd.vuighenet.model.Episode;
+import thachdd.vuighenet.model.EpisodeDetail;
 
 /**
  * Created by thachdd on 05/02/2017.
  */
 
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MyViewHolder> {
-    private List<Episode> mListEpisode;
+    private List<EpisodeDetail> mEpisodes;
+
+    public MainRecyclerAdapter() {
+        mEpisodes = new ArrayList<>();
+    }
+
+    public MainRecyclerAdapter(List<EpisodeDetail> episodes) {
+        mEpisodes = episodes;
+    }
+
+    public void setEpisodes(List<EpisodeDetail> episodes) {
+        if (mEpisodes != null && mEpisodes.size() > 0) {
+            mEpisodes.clear();
+        }
+
+        mEpisodes = episodes;
+    }
+
+    public void addEpisode(EpisodeDetail episode) {
+        if (mEpisodes == null) {
+            mEpisodes = new ArrayList<>();
+        }
+
+        mEpisodes.add(episode);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
@@ -46,12 +80,29 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        Log.d("mylog", mEpisodes.get(position).getFullName());
 
+        holder.mViews.setText("" + mEpisodes.get(position).getViews() + " views");
+
+        final String str = mEpisodes.get(position).getFullName();
+        holder.mTitle.setText(str);
+
+//        try {
+//            Uri uri = Uri.parse(mEpisodes.get(position).getThumbnail());
+//            holder.mImageView.setImageURI(uri);
+//        }
+//        catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mEpisodes.size();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 }

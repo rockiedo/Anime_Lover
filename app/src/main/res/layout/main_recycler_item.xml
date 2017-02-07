@@ -27,10 +27,12 @@
                 android:layout_height="match_parent"
                 android:minWidth="160dp"
                 android:minHeight="90dp"
+                android:maxWidth="240dp"
+                android:maxHeight="135dp"
                 android:layout_centerVertical="true"
                 android:scaleType="centerCrop"
                 android:background="#32212121"
-                android:src="@drawable/thumb"/>
+                android:src="@drawable/tmp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -44,14 +46,12 @@
                     android:id="@+id/main_recycler_item_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vua hai tac"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/main_recycler_item_views"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1000 views"
                     android:textSize="12sp"/>
 
             </LinearLayout>

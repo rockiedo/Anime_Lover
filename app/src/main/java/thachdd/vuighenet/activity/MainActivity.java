@@ -1,11 +1,6 @@
 package thachdd.vuighenet.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,17 +13,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
-import retrofit2.Call;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import thachdd.vuighenet.R;
 import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.ApiInterface;
 import thachdd.vuighenet.api_client.SeasonsCallback;
+import thachdd.vuighenet.model.SeasonDetail;
 import thachdd.vuighenet.model.SeasonsResponse;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecycler = null;
     private AVLoadingIndicatorView mLoading = null;
     private RelativeLayout mLoadingContainer = null;
+    private Spinner mSpinner = null;
 
-    private SeasonsCallback mSeasonsCallback;
+    private SeasonsCallback mSeasonsCallback = null;
+    private SeasonDetail mCurrentSeason = null;
+    private List<SeasonDetail> mSeasons = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +74,25 @@ public class MainActivity extends AppCompatActivity {
         MainRecyclerAdapter adapter = new MainRecyclerAdapter();
         mRecycler.setAdapter(adapter);
 
-        mLoadingContainer = (RelativeLayout) findViewById(R.id.main_loading_container);
+        mSpinner = (Spinner) findViewById(R.id.main_spinner);
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
 
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(mSpinner);
+
+            // Set popupWindow height to 500px
+            popupWindow.setHeight(500);
+        }
+        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
+
+        mLoadingContainer = (RelativeLayout) findViewById(R.id.main_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.main_loading);
-        mLoading.show();
+
+        loadSeasons();
     }
 
     @Override
@@ -116,8 +135,28 @@ public class MainActivity extends AppCompatActivity {
         api.getSeasons().enqueue(mSeasonsCallback);
     }
 
-    public void onSeasonsLoaded(SeasonsResponse response) {
+    public void onSeasonsLoadedSuccessfully(SeasonsResponse response) {
+        mSeasons = response.getSeasonsDetail();
+        mCurrentSeason = mSeasons.get(0);
 
+        ArrayList<String> spinnerData = new ArrayList<>();
+        for (SeasonDetail season : mSeasons) {
+            spinnerData.add(season.toString());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                                        android.R.layout.simple_spinner_item, spinnerData);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
+
+        loadEpisodes(mSeasons.get(0).getId());
+    }
+
+    public void onSeasonsLoadedFailed() {
+        mLoading.hide();
+        Toast.makeText(this, "Khong the tai duoc du lieu", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     public void loadEpisodes(int seasonId) {

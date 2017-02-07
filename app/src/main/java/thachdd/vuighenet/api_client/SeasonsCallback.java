@@ -25,12 +25,15 @@ public class SeasonsCallback implements Callback<SeasonsResponse> {
     public void onResponse(Call<SeasonsResponse> call, Response<SeasonsResponse> response) {
         MainActivity activity = (MainActivity) activityWeakReference.get();
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-            activity.onSeasonsLoaded(response.body());
+            activity.onSeasonsLoadedSuccessfully(response.body());
         }
     }
 
     @Override
     public void onFailure(Call<SeasonsResponse> call, Throwable t) {
-
+        MainActivity activity = (MainActivity) activityWeakReference.get();
+        if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+            activity.onSeasonsLoadedFailed();
+        }
     }
 }

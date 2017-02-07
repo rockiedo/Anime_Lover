@@ -15,6 +15,35 @@ public class SeasonDetail {
     private int end;
     @SerializedName("detail_name")
     private String detailName;
+    @SerializedName("name")
+    private int name;
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("Season ");
+        buffer.append(name);
+        buffer.append(" (");
+        buffer.append(begin);
+        buffer.append("-");
+        buffer.append(end);
+        buffer.append("): ");
+        buffer.append(detailName);
+
+        String res = buffer.toString();
+        buffer.delete(0, buffer.length());
+
+        return res;
+    }
+
+    public int getName() {
+        return name;
+    }
+
+    public void setName(int name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;

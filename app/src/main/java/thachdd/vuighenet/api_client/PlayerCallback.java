@@ -29,11 +29,8 @@ public class PlayerCallback implements Callback<PlayerResponse> {
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
             List<PlayerDetail> players = response.body().getSources().getData();
 
-            if (players.size() > 1) {
+            if (players.size() > 0) {
                 activity.onPlayerLoadedSuccessfully(players.get(1).getLink());
-            }
-            else {
-                activity.onPlayerLoadedSuccessfully(players.get(0).getLink());
             }
         }
     }

@@ -7,11 +7,10 @@
     tools:context="thachdd.vuighenet.activity.PlayerActivity"
     android:background="#212121">
 
-    <SurfaceView
-        android:id="@+id/player_surfaceView"
+    <VideoView
+        android:id="@+id/player_videoview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"/>
+        android:layout_height="match_parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"

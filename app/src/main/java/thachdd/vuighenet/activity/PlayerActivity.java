@@ -23,8 +23,6 @@ public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.C
     private SurfaceHolder mSurfaceHolder = null;
     private MediaPlayer mMediaPlayer = null;
 
-    private View mToolbar = null;
-
     private RelativeLayout mLoadingContainer = null;
     private AVLoadingIndicatorView mLoading = null;
     private PlayerCallback mPlayerCallback = null;
@@ -52,8 +50,6 @@ public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.C
         mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.addCallback(this);
 
-        mToolbar = findViewById(R.id.player_toolbar);
-
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
 
@@ -75,32 +71,11 @@ public class PlayerActivity extends AppCompatActivity implements SurfaceHolder.C
     }
 
     public void playerOnClick(View v) {
-        switch (v.getId()) {
-            case R.id.player_btn_back: {
-                finish();
-                break;
-            }
 
-            case R.id.player_btn_download: {
-                Toast.makeText(this, "This functionality is coming soon!", Toast.LENGTH_SHORT).show();
-                break;
-            }
-
-            default:
-                break;
-        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mToolbar.getVisibility() == View.VISIBLE) {
-                mToolbar.setVisibility(View.GONE);
-            }
-            else {
-                mToolbar.setVisibility(View.VISIBLE);
-            }
-        }
 
         return super.onTouchEvent(event);
     }

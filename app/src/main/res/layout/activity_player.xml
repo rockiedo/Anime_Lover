@@ -14,48 +14,6 @@
         android:layout_centerInParent="true"/>
 
     <RelativeLayout
-        android:id="@+id/player_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:background="#64ff9800"
-        android:gravity="center_vertical"
-        android:visibility="gone">
-
-        <ImageButton
-            android:onClick="playerOnClick"
-            android:id="@+id/player_btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back_action"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="16dp"/>
-
-        <TextView
-            android:id="@+id/player_txt_title"
-            android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:text="Movie title"
-            android:layout_marginLeft="32dp"
-            android:layout_toRightOf="@id/player_btn_back"
-            android:gravity="center_vertical"
-            android:textColor="#ffffff"
-            android:padding="0dp"
-            android:layout_alignTop="@+id/player_btn_back" />
-
-        <ImageButton
-            android:onClick="playerOnClick"
-            android:id="@+id/player_btn_download"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_download_action"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"/>
-    </RelativeLayout>
-
-    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/player_loading_container"

@@ -30,7 +30,7 @@ public class PlayerCallback implements Callback<PlayerResponse> {
             List<PlayerDetail> players = response.body().getSources().getData();
 
             if (players.size() > 0) {
-                activity.onPlayerLoadedSuccessfully(players.get(1).getLink());
+                activity.onPlayerLoadedSuccessfully(players.get(players.size() - 1).getLink());
             }
         }
     }

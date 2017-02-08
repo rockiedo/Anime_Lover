@@ -10,7 +10,9 @@
     <VideoView
         android:id="@+id/player_videoview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:foregroundGravity="center"
+        android:layout_gravity="center" />
 
     <RelativeLayout
         android:layout_width="match_parent"

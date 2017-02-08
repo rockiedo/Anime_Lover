@@ -3,11 +3,13 @@ package thachdd.vuighenet.api_client;
 import android.app.Activity;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import thachdd.vuighenet.activity.PlayerActivity;
+import thachdd.vuighenet.model.PlayerDetail;
 import thachdd.vuighenet.model.PlayerResponse;
 
 /**
@@ -25,7 +27,14 @@ public class PlayerCallback implements Callback<PlayerResponse> {
     public void onResponse(Call<PlayerResponse> call, Response<PlayerResponse> response) {
         PlayerActivity activity = (PlayerActivity) weakReference.get();
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-            activity.onPlayerLoadedSuccessfully(response.body());
+            List<PlayerDetail> players = response.body().getSources().getData();
+
+            if (players.size() > 1) {
+                activity.onPlayerLoadedSuccessfully(players.get(1).getLink());
+            }
+            else {
+                activity.onPlayerLoadedSuccessfully(players.get(0).getLink());
+            }
         }
     }
 

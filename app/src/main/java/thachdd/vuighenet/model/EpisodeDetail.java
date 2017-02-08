@@ -9,12 +9,32 @@ import com.google.gson.annotations.SerializedName;
 public class EpisodeDetail {
     @SerializedName("id")
     private int id;
+    @SerializedName("name")
+    private int name;
     @SerializedName("full_name")
     private String fullName;
     @SerializedName("thumbnail")
     private String thumbnail;
     @SerializedName("views")
     private long views;
+    @SerializedName("link")
+    private String link;
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public int getName() {
+        return name;
+    }
+
+    public void setName(int name) {
+        this.name = name;
+    }
 
     public long getViews() {
         return views;

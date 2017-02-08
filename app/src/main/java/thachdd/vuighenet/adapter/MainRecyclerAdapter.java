@@ -107,4 +107,8 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
     public int getPlayerId(int pos) {
         return mEpisodes.get(pos).getId();
     }
+
+    public String getLink(int pos) {
+        return mEpisodes.get(pos).getLink();
+    }
 }

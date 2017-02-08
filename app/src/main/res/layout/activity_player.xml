@@ -7,8 +7,8 @@
     tools:context="thachdd.vuighenet.activity.PlayerActivity"
     android:background="#212121">
 
-    <VideoView
-        android:id="@+id/player_video"
+    <SurfaceView
+        android:id="@+id/player_surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"/>
@@ -60,7 +60,8 @@
         android:layout_height="match_parent"
         android:id="@+id/player_loading_container"
         android:visibility="gone"
-        android:background="#212121">
+        android:background="#212121"
+        android:gravity="center">
 
         <com.wang.avi.AVLoadingIndicatorView
             xmlns:app="http://schemas.android.com/apk/res-auto"

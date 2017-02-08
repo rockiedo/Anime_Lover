@@ -69,10 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickedListener.OnItemClickedListener() {
                     @Override
                     public void onItemClicked(View v, int postion) {
+                        String link = mAdapter.getLink(postion);
                         int id = mAdapter.getPlayerId(postion);
 
                         Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
-                        intent.putExtra("playerId", id);
+                        intent.putExtra("link", link);
+                        intent.putExtra("id", id);
                         startActivity(intent);
                     }
                 }));

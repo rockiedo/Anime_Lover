@@ -33,7 +33,7 @@ public class JsoupAsync extends AsyncTask<String, Void, String> {
             link = params[0];
         }
 
-        String url = HOST + link;
+        String url = params[0];
         try {
             Document doc = Jsoup.connect(url).get();
             Element element = doc.getElementById("videoPlayer");

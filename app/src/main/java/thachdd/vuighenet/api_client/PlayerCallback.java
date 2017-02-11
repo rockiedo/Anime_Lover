@@ -1,6 +1,7 @@
 package thachdd.vuighenet.api_client;
 
 import android.app.Activity;
+import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -31,6 +32,10 @@ public class PlayerCallback implements Callback<PlayerResponse> {
 
             if (players.size() > 0) {
                 activity.onPlayerLoadedSuccessfully(players.get(players.size() - 1).getLink());
+                Log.d("mylog", players.get(players.size() - 1).getQuality());
+            }
+            else {
+                activity.onPlayerLoadedSuccessfully(null);
             }
         }
     }

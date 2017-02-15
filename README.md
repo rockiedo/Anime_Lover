@@ -5,4 +5,4 @@
 2. This project is also a revision in Android coding.
 
 ## About technical
-Please visit this project Wiki.
+Please visit this project [Wiki](https://github.com/dodaithach/Anime_Lover/wiki).

@@ -1,7 +1,6 @@
 package thachdd.vuighenet.api_client;
 
 import android.app.Activity;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

@@ -29,7 +29,6 @@ import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.ApiInterface;
 import thachdd.vuighenet.api_client.EpisodesCallback;
-import thachdd.vuighenet.api_client.HerokuInterface;
 import thachdd.vuighenet.api_client.SeasonsCallback;
 import thachdd.vuighenet.listener.RecyclerItemClickedListener;
 import thachdd.vuighenet.model.EpisodeDetail;

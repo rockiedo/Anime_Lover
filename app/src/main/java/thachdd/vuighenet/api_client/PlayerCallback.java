@@ -28,14 +28,34 @@ public class PlayerCallback implements Callback<PlayerResponse> {
     public void onResponse(Call<PlayerResponse> call, Response<PlayerResponse> response) {
         PlayerActivity activity = (PlayerActivity) weakReference.get();
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-            List<PlayerDetail> players = response.body().getSources().getData();
+            List<PlayerDetail> players = response.body().getData();
 
             if (players.size() > 0) {
-                activity.onPlayerLoadedSuccessfully(players.get(players.size() - 1).getLink());
-                Log.d("mylog", players.get(players.size() - 1).getQuality());
+                int id360 = -1, id480 = -1;
+
+                for (int i = 0; i < players.size(); i++) {
+                    if (players.get(i).getResolution() == 360) {
+                        id360 = i;
+                    }
+
+                    if (players.get(i).getResolution() == 480) {
+                        id480 = i;
+                        break;
+                    }
+                }
+
+                if (id480 != -1) {
+                    activity.onPlayerLoadedSuccessfully(players.get(id480).getUrl());
+                }
+                else if (id360 != -1) {
+                    activity.onPlayerLoadedSuccessfully(players.get(id360).getUrl());
+                }
+                else {
+                    activity.onPlayerLoadedFailed();
+                }
             }
             else {
-                activity.onPlayerLoadedSuccessfully(null);
+                activity.onPlayerLoadedFailed();
             }
         }
     }

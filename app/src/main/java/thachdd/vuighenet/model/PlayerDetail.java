@@ -7,34 +7,24 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class PlayerDetail {
-    @SerializedName("src")
-    private String link;
-    @SerializedName("type")
-    private String type;
-    @SerializedName("quality")
-    private String quality;
+    @SerializedName("url")
+    private String url;
+    @SerializedName("resolution")
+    private int resolution;
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public String getQuality() {
-        return quality;
+    public int getResolution() {
+        return resolution;
     }
 
-    public void setQuality(String quality) {
-        this.quality = quality;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    public void setResolution(int resolution) {
+        this.resolution = resolution;
     }
 }

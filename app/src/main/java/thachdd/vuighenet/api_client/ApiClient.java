@@ -21,4 +21,18 @@ public class ApiClient {
 
         return retrofit;
     }
+
+    public static final String HEROKU_URL = "https://anime-lover.herokuapp.com/api/";
+    private static Retrofit heroku = null;
+
+    public static Retrofit getHeroku() {
+        if (heroku == null) {
+            heroku = new Retrofit.Builder()
+                        .baseUrl(HEROKU_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+        }
+
+        return heroku;
+    }
 }

@@ -29,6 +29,7 @@ import thachdd.vuighenet.adapter.MainRecyclerAdapter;
 import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.ApiInterface;
 import thachdd.vuighenet.api_client.EpisodesCallback;
+import thachdd.vuighenet.api_client.HerokuInterface;
 import thachdd.vuighenet.api_client.SeasonsCallback;
 import thachdd.vuighenet.listener.RecyclerItemClickedListener;
 import thachdd.vuighenet.model.EpisodeDetail;
@@ -44,11 +45,12 @@ public class MainActivity extends AppCompatActivity {
     private Spinner mSpinner = null;
 
     private SeasonsCallback mSeasonsCallback = null;
-    private List<SeasonDetail> mSeasons =  new ArrayList<>();
+    private List<SeasonDetail> mSeasons = new ArrayList<>();
     private EpisodesCallback mEpisodesCallback = null;
     private List<EpisodeDetail> mEpisodes = new ArrayList<>();
 
     private MainRecyclerAdapter mAdapter = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +71,9 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickedListener.OnItemClickedListener() {
                     @Override
                     public void onItemClicked(View v, int postion) {
-                        String link = mAdapter.getLink(postion);
-                        int id = mAdapter.getPlayerId(postion);
+                        int id = mEpisodes.get(postion).getName();
 
                         Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
-                        intent.putExtra("link", link);
                         intent.putExtra("id", id);
                         startActivity(intent);
                     }
@@ -100,8 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Set popupWindow height to 500px
             popupWindow.setHeight(500);
-        }
-        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
 
@@ -138,8 +137,7 @@ public class MainActivity extends AppCompatActivity {
         if (mode) {
             mLoading.show();
             mLoadingContainer.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mLoading.hide();
             mLoadingContainer.setVisibility(View.GONE);
         }
@@ -162,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                                        android.R.layout.simple_spinner_item, spinnerData);
+                android.R.layout.simple_spinner_item, spinnerData);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
@@ -185,7 +183,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onEpisodesLoadedSuccessfully(EpisodesResponse response) {
-        mAdapter.setEpisodes(response.getEpisodesDetail());
+        mEpisodes = response.getEpisodesDetail();
+
+        if (mEpisodes.get(0).getName() == 0) {
+            mEpisodes.remove(0);
+        }
+
+        mAdapter.setEpisodes(mEpisodes);
         mAdapter.notifyDataSetChanged();
 
         showLoading(false);

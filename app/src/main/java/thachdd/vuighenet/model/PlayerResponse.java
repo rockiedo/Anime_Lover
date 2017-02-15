@@ -2,19 +2,21 @@ package thachdd.vuighenet.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Created by cpu60011-local on 07/02/2017.
  */
 
 public class PlayerResponse {
-    @SerializedName("sources")
-    private PlayerWrapper sources;
+    @SerializedName("data")
+    private List<PlayerDetail> data;
 
-    public PlayerWrapper getSources() {
-        return sources;
+    public List<PlayerDetail> getData() {
+        return data;
     }
 
-    public void setSources(PlayerWrapper sources) {
-        this.sources = sources;
+    public void setData(List<PlayerDetail> data) {
+        this.data = data;
     }
 }

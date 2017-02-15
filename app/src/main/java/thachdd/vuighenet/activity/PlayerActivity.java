@@ -3,8 +3,10 @@ package thachdd.vuighenet.activity;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -14,10 +16,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import thachdd.vuighenet.R;
 import thachdd.vuighenet.api_client.ApiClient;
-import thachdd.vuighenet.api_client.ApiInterface;
+import thachdd.vuighenet.api_client.HerokuInterface;
 import thachdd.vuighenet.api_client.PlayerCallback;
-import thachdd.vuighenet.async.JsoupAsync;
-import thachdd.vuighenet.async.RedirectAsync;
 
 public class PlayerActivity extends AppCompatActivity {
     private VideoView mVideoView = null;
@@ -26,9 +26,6 @@ public class PlayerActivity extends AppCompatActivity {
     private RelativeLayout mLoadingContainer = null;
     private AVLoadingIndicatorView mLoading = null;
     private PlayerCallback mPlayerCallback = null;
-
-    private RedirectAsync mRedirectAsync = null;
-    private JsoupAsync mJsoupAsync = null;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -57,7 +54,6 @@ public class PlayerActivity extends AppCompatActivity {
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
 
-//        showLoading(true);
         loadVideo();
     }
 
@@ -87,14 +83,20 @@ public class PlayerActivity extends AppCompatActivity {
         showLoading(true);
 
         int id = getIntent().getIntExtra("id", 0);
+
+        Log.d("mylog", "load episode: " + id);
+
         mPlayerCallback = new PlayerCallback(this);
-        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
-        api.getPlayer(id).enqueue(mPlayerCallback);
+        HerokuInterface api = ApiClient.getHeroku().create(HerokuInterface.class);
+        api.getPlayerDetail(id).enqueue(mPlayerCallback);
     }
 
     public void onPlayerLoadedSuccessfully(String url) {
 //        url = "https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
 //        url = "https://redirector.googlevideo.com/videoplayback?id=7732952c93ac3251&itag=59&source=webdrive&requiressl=yes&ttl=transient&mm=30&mn=sn-npoe7n7y&ms=nxu&mv=m&pl=20&mime=video/mp4&lmt=1477820339908422&mt=1486565919&ip=139.59.229.244&ipbits=0&expire=1486580339&sparams=ip%2Cipbits%2Cexpire%2Cid%2Citag%2Csource%2Crequiressl%2Cttl%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cmime%2Clmt&signature=8F971E60538F2DAFF97A346568AEF066976547EA.7D002483A045F10A0D2B75F2923D170E36E759B3&key=ck2&app=explorer&title=[VuiGhe.Net] Vua Hai Tac - Tap 0-(480p)";
+//        url = "https://redirector.googlevideo.com/videoplayback?id=c4056a6e82eda499&itag=18&source=webdrive&requiressl=yes&ttl=transient&mm=30&mn=sn-i3b7kn7k&ms=nxu&mv=u&pl=20&mime=video/mp4&lmt=1484973049472625&mt=1486903971&ip=125.212.241.142&ipbits=0&expire=1486918431&ste=m1&sparams=ip%2Cipbits%2Cexpire%2Cid%2Citag%2Csource%2Crequiressl%2Cttl%2Cmm%2Cmn%2Cms%2Cmv%2Cpl%2Cmime%2Clmt&signature=03EF96054CE11D111ADD4BD2D9C18612C792539F.2A5B74780663C872517AA3CFCEA886A64E2AF01F&key=ck2&app=explorer&sck=U2FsdGVkX1%2BpM%2BkBjzSalf%2BbDN0xIVolE89gJ6H%2Bsqo%3D";
+
+        Log.d("mylog", "onPlayerLoadedSuccessfully(): " + url);
 
         if (url == null) {
             Toast.makeText(this, "Khong the tai video", Toast.LENGTH_LONG).show();
@@ -104,23 +106,14 @@ public class PlayerActivity extends AppCompatActivity {
             return;
         }
 
-        mJsoupAsync = new JsoupAsync(this);
-        mJsoupAsync.execute(url);
-    }
-
-    public void onRedirectSuccessfully(Uri uri) {
-        mVideoView.setVideoURI(uri);
+        mVideoView.setVideoURI(Uri.parse(url));
         mVideoView.start();
         showLoading(false);
     }
 
-    public void onRedirectFailed() {
-        Toast.makeText(this, "Khong the tai video", Toast.LENGTH_LONG).show();
-        showLoading(false);
-        finish();
-    }
-
     public void onPlayerLoadedFailed() {
+        Log.d("mylog", "onPlayerLoadedFailed()");
+
         Toast.makeText(this, "Khong the tai video", Toast.LENGTH_LONG).show();
         showLoading(false);
         finish();

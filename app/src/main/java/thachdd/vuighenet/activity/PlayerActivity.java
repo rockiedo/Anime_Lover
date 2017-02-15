@@ -3,14 +3,13 @@ package thachdd.vuighenet.activity;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.VideoView;
 
+import com.devbrackets.android.exomedia.listener.OnPreparedListener;
+import com.devbrackets.android.exomedia.ui.widget.EMVideoView;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import thachdd.vuighenet.R;
@@ -18,9 +17,8 @@ import thachdd.vuighenet.api_client.ApiClient;
 import thachdd.vuighenet.api_client.HerokuInterface;
 import thachdd.vuighenet.api_client.PlayerCallback;
 
-public class PlayerActivity extends AppCompatActivity {
-    private VideoView mVideoView = null;
-    private MediaController mMediaController = null;
+public class PlayerActivity extends AppCompatActivity implements OnPreparedListener {
+    private EMVideoView mVideoView = null;
 
     private RelativeLayout mLoadingContainer = null;
     private AVLoadingIndicatorView mLoading = null;
@@ -34,9 +32,9 @@ public class PlayerActivity extends AppCompatActivity {
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                            );
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 
@@ -45,15 +43,31 @@ public class PlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        mVideoView = (VideoView) findViewById(R.id.player_videoview);
-        mMediaController = new MediaController(this);
-        mMediaController.setAnchorView(mVideoView);
-        mVideoView.setMediaController(mMediaController);
+        mVideoView = (EMVideoView) findViewById(R.id.player_videoview);
+        mVideoView.setOnPreparedListener(this);
 
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
 
         loadVideo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mVideoView != null) {
+            mVideoView.start();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (mVideoView != null) {
+            mVideoView.restart();
+        }
     }
 
     @Override
@@ -68,6 +82,7 @@ public class PlayerActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (mVideoView != null) {
+            mVideoView.release();
             mVideoView = null;
         }
     }
@@ -99,8 +114,6 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         mVideoView.setVideoURI(Uri.parse(url));
-        mVideoView.start();
-        showLoading(false);
     }
 
     public void onPlayerLoadedFailed() {
@@ -118,5 +131,11 @@ public class PlayerActivity extends AppCompatActivity {
             mLoading.hide();
             mLoadingContainer.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onPrepared() {
+        showLoading(false);
+        mVideoView.start();
     }
 }

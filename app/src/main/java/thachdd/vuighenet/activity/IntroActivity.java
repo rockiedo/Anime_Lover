@@ -17,8 +17,6 @@ import thachdd.vuighenet.api_client.SeasonsCallback;
 public class IntroActivity extends AppCompatActivity {
     private final int INTERNET_PERMISSION_CODE = 1111;
 
-    private SeasonsCallback seasonsCallback;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

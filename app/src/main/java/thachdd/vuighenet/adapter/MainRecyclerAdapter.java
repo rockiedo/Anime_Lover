@@ -30,11 +30,6 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         mEpisodes = new ArrayList<>();
     }
 
-    public MainRecyclerAdapter(Activity activity, List<EpisodeDetail> episodes) {
-        weakReference = new WeakReference<Activity>(activity);
-        mEpisodes = episodes;
-    }
-
     public void setEpisodes(List<EpisodeDetail> episodes) {
         if (mEpisodes != null && mEpisodes.size() > 0) {
             mEpisodes.clear();

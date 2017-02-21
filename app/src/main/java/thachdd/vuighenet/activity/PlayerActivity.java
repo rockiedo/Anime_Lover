@@ -1,9 +1,12 @@
 package thachdd.vuighenet.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -41,6 +44,16 @@ public class PlayerActivity extends AppCompatActivity {
     private AVLoadingIndicatorView mLoading = null;
     private PlayerCallback mPlayerCallback = null;
 
+    private final String URL_TAG = "url";
+    private final String CURPOS_TAG = "curpos";
+    private final String ISPLAY_TAG = "isplay";
+
+    private String mCachedUrl = null;
+    private Long mCachedCusPos = -1l;
+    private Boolean mCachedIsPlaying = true;
+
+    private boolean mClearCache = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,8 +72,20 @@ public class PlayerActivity extends AppCompatActivity {
 
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
+    }
 
-        loadVideo();
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        loadCache();
+        mClearCache = true;
+
+        if (mCachedUrl != null) {
+            prepareVideo(mCachedUrl);
+        } else {
+            loadVideo();
+        }
     }
 
     @Override
@@ -80,6 +105,8 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        storeCache();
+
         if (mExoPlayer != null) {
             mExoPlayer.stop();
         }
@@ -91,6 +118,10 @@ public class PlayerActivity extends AppCompatActivity {
 
         if (mExoPlayer != null) {
             mExoPlayer.release();
+        }
+
+        if (mClearCache) {
+            clearCache();
         }
     }
 
@@ -119,6 +150,11 @@ public class PlayerActivity extends AppCompatActivity {
 
             return;
         }
+
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putString(URL_TAG, url);
+        edit.commit();
 
         prepareVideo(url);
     }
@@ -149,8 +185,50 @@ public class PlayerActivity extends AppCompatActivity {
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         MediaSource videoSource = new ExtractorMediaSource(Uri.parse(url),
                 dataSourceFactory, extractorsFactory, null, null);
+
+        if (mCachedCusPos != -1) {
+            mExoPlayer.seekTo(mCachedCusPos);
+        }
+        mExoPlayer.setPlayWhenReady(mCachedIsPlaying);
         mExoPlayer.prepare(videoSource);
 
         showLoading(false);
+    }
+
+    public void rotate() {
+        mClearCache = false;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+    public void onBtnFullscreenClicked(View v) {
+        rotate();
+    }
+
+    public void loadCache() {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        mCachedUrl = sharedPreferences.getString(URL_TAG, null);
+        mCachedIsPlaying = sharedPreferences.getBoolean(ISPLAY_TAG, true);
+        mCachedCusPos = sharedPreferences.getLong(CURPOS_TAG, -1);
+    }
+
+    public void storeCache() {
+        long curPos = mExoPlayer.getCurrentPosition();
+        boolean isPlaying = mExoPlayer.getPlayWhenReady();
+
+        SharedPreferences.Editor edit = getPreferences(Context.MODE_PRIVATE).edit();
+        edit.putLong(CURPOS_TAG, curPos);
+        edit.putBoolean(ISPLAY_TAG, isPlaying);
+        edit.commit();
+    }
+
+    public void clearCache() {
+        SharedPreferences.Editor edit = getPreferences(Context.MODE_PRIVATE).edit();
+        edit.clear();
+        edit.commit();
     }
 }

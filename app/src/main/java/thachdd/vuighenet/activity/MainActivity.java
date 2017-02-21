@@ -114,19 +114,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_actions, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.main_action_search);
-        SearchView searchView =
-                (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // add prediction to search view
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
     public void onClick(View v) {
         Intent intent = new Intent(this, PlayerActivity.class);
         startActivity(intent);

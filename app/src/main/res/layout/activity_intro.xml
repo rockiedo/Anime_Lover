@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Anime Lover"
+            android:text="One Piece Lover"
             android:textColor="#ffffff"
             android:textSize="32sp"
             android:layout_centerHorizontal="true"

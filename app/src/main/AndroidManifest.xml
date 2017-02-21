@@ -25,7 +25,6 @@
         <activity
             android:name=".activity.PlayerActivity"
             android:parentActivityName=".activity.MainActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

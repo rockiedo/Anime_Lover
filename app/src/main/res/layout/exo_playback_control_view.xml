@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="32dp"
+    android:layout_gravity="bottom"
+    android:background="@drawable/playback_rounded_background"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
+
+    <FrameLayout
+        android:id="@+id/groupPlayPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp">
+
+        <ImageButton
+            android:id="@id/exo_play"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            style="@style/ExoMediaButton.Play"/>
+
+        <ImageButton
+            android:id="@id/exo_pause"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            style="@style/ExoMediaButton.Pause"/>
+        
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@id/exo_rew"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toLeftOf="@id/groupPlayPause"
+        android:layout_marginRight="24dp"
+        style="@style/ExoMediaButton.Rewind" />
+
+    <ImageButton
+        android:id="@id/exo_ffwd"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toRightOf="@id/groupPlayPause"
+        android:layout_marginLeft="24dp"
+        style="@style/ExoMediaButton.FastForward"/>
+
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_action_rotate_screen"
+        android:layout_alignParentRight="true"
+        android:background="@null"/>
+
+    <TextView
+        android:id="@id/exo_position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupPlayPause"
+        android:layout_alignParentLeft="true"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@id/exo_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/groupPlayPause"
+        android:layout_alignParentRight="true"
+        android:textColor="#ffffff"/>
+
+    <SeekBar
+        android:id="@id/exo_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/groupPlayPause"
+        android:layout_toRightOf="@id/exo_position"
+        android:layout_toLeftOf="@id/exo_duration"/>
+
+</RelativeLayout>

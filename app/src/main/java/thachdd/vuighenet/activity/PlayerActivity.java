@@ -69,6 +69,8 @@ public class PlayerActivity extends AppCompatActivity {
 
         mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
         mExoView.setPlayer(mExoPlayer);
+        mExoView.setFastForwardIncrementMs(10000);
+        mExoView.setRewindIncrementMs(10000);
 
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);

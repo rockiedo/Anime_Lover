@@ -14,7 +14,8 @@
         android:animateLayoutChanges="true"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
-        android:backgroundTint="#000000"/>
+        android:backgroundTint="#000000"
+        android:keepScreenOn="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

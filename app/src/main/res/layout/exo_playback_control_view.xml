@@ -24,14 +24,16 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            style="@style/ExoMediaButton.Play"/>
+            android:src="@drawable/ic_action_play"
+            android:background="@null"/>
 
         <ImageButton
             android:id="@id/exo_pause"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            style="@style/ExoMediaButton.Pause"/>
+            android:src="@drawable/ic_action_pause"
+            android:background="@null"/>
         
     </FrameLayout>
 
@@ -41,7 +43,8 @@
         android:layout_height="24dp"
         android:layout_toLeftOf="@id/groupPlayPause"
         android:layout_marginRight="48dp"
-        style="@style/ExoMediaButton.Rewind" />
+        android:src="@drawable/ic_action_backward"
+        android:background="@null"/>
 
     <ImageButton
         android:id="@id/exo_ffwd"
@@ -49,7 +52,8 @@
         android:layout_height="24dp"
         android:layout_toRightOf="@id/groupPlayPause"
         android:layout_marginLeft="48dp"
-        style="@style/ExoMediaButton.FastForward"/>
+        android:src="@drawable/ic_action_forward"
+        android:background="@null"/>
 
     <ImageButton
         android:layout_width="24dp"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="thachdd.vuighenet.activity.PlayerActivity"
-    android:background="#f0000000">
+    android:background="#f0000000"
+    android:layout_gravity="top">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/main_exoview"
@@ -34,5 +35,22 @@
             app:indicatorName="BallClipRotatePulseIndicator"/>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/player_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/playback_rounded_background"
+        android:textColor="#ffffff"
+        android:text="Movie title"
+        android:textSize="14sp"
+        android:maxLines="3"
+        android:layout_marginTop="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="8dp"
+        android:paddingLeft="64dp"
+        android:paddingRight="64dp" />
 
 </FrameLayout>

@@ -5,11 +5,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -44,6 +49,15 @@ public class PlayerActivity extends AppCompatActivity {
     private AVLoadingIndicatorView mLoading = null;
     private PlayerCallback mPlayerCallback = null;
 
+    private TextView mTitle = null;
+    private final int DEFAULT_DELAY = 4000;
+    private final Handler mHideTitleHandle = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            showTitle(false);
+        }
+    };
+
     private final String URL_TAG = "url";
     private final String CURPOS_TAG = "curpos";
     private final String ISPLAY_TAG = "isplay";
@@ -71,6 +85,9 @@ public class PlayerActivity extends AppCompatActivity {
         mExoView.setPlayer(mExoPlayer);
         mExoView.setFastForwardIncrementMs(10000);
         mExoView.setRewindIncrementMs(10000);
+
+        mTitle = (TextView) findViewById(R.id.player_title);
+        mTitle.setText(getIntent().getStringExtra("title"));
 
         mLoadingContainer = (RelativeLayout) findViewById(R.id.player_loading_container);
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.player_loading);
@@ -101,6 +118,8 @@ public class PlayerActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_FULLSCREEN |
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        showTitle(true);
     }
 
     @Override
@@ -129,6 +148,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        showTitle(true);
 
         return super.onTouchEvent(event);
     }
@@ -232,5 +252,16 @@ public class PlayerActivity extends AppCompatActivity {
         SharedPreferences.Editor edit = getPreferences(Context.MODE_PRIVATE).edit();
         edit.clear();
         edit.commit();
+    }
+
+    public void showTitle(boolean mode) {
+        if (mode) {
+            mTitle.setVisibility(View.VISIBLE);
+            mHideTitleHandle.sendEmptyMessageDelayed(0, DEFAULT_DELAY);
+        } else {
+            Animation anim = AnimationUtils.loadAnimation(this, R.anim.fade_out_anim);
+            mTitle.startAnimation(anim);
+            mTitle.setVisibility(View.GONE);
+        }
     }
 }

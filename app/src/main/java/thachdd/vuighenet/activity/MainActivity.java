@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
                         intent.putExtra("id", id);
+                        intent.putExtra("title", mEpisodes.get(postion).getFullName());
                         startActivity(intent);
                     }
                 }));

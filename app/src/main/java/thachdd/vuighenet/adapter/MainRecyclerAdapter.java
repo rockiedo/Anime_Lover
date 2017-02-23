@@ -1,6 +1,8 @@
 package thachdd.vuighenet.adapter;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import thachdd.vuighenet.model.EpisodeDetail;
 public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapter.MyViewHolder> {
     private List<EpisodeDetail> mEpisodes;
     private WeakReference<Activity> weakReference;
+    private int mCurId = -1;
 
     public MainRecyclerAdapter(Activity activity) {
         weakReference = new WeakReference<Activity>(activity);
@@ -82,6 +85,13 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
         holder.mViews.setText(views);
         holder.mTitle.setText(title);
 
+        if (mEpisodes.get(position).getId() == mCurId) {
+            holder.mTitle.setTextColor(Color.parseColor("#FF9800"));
+        }
+        else {
+            holder.mTitle.setTextColor(Color.parseColor("#757575"));
+        }
+
         Activity activity = weakReference.get();
         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
             Picasso.with(activity.getApplicationContext()).load(episode.getThumbnail()).into(holder.mImageView);
@@ -104,5 +114,9 @@ public class MainRecyclerAdapter extends RecyclerView.Adapter<MainRecyclerAdapte
 
     public String getLink(int pos) {
         return mEpisodes.get(pos).getLink();
+    }
+
+    public void setCurId(int curId) {
+        mCurId = curId;
     }
 }

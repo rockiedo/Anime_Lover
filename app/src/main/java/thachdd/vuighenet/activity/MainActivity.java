@@ -49,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private MainRecyclerAdapter mAdapter = null;
 
     private final String MY_SP = "mysharedpreferences";
-    private final String SEASON_IDX ="seasonidx";
+    private final String SEASON_POS ="seasonidx";
+    private final String EPISODE_ID = "episodeid";
+    private final String EPISODE_POS = "episodepos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 new RecyclerItemClickedListener.OnItemClickedListener() {
                     @Override
                     public void onItemClicked(View v, int postion) {
+                        SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putInt(EPISODE_POS, postion);
+                        edit.putInt(EPISODE_ID, mEpisodes.get(postion).getId());
+                        edit.putInt(SEASON_POS, mSpinner.getSelectedItemPosition());
+                        edit.commit();
+
                         int id = mEpisodes.get(postion).getName();
 
                         Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
@@ -82,11 +91,6 @@ public class MainActivity extends AppCompatActivity {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
-                SharedPreferences.Editor edit = sp.edit();
-                edit.putInt(SEASON_IDX, position);
-                edit.commit();
-
                 loadEpisodes(mSeasons.get(position).getId());
             }
 
@@ -112,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
         mLoading = (AVLoadingIndicatorView) findViewById(R.id.main_loading);
 
         loadSeasons();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        mAdapter.notifyDataSetChanged();
+        showLastVisit();
     }
 
     @Override
@@ -152,11 +164,9 @@ public class MainActivity extends AppCompatActivity {
         mSpinner.setAdapter(adapter);
 
         SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
-        int id = sp.getInt(SEASON_IDX, 0);
+        int id = sp.getInt(SEASON_POS, 0);
 
         mSpinner.setSelection(id);
-
-//        loadEpisodes(mSeasons.get(0).getId());
     }
 
     public void onSeasonsLoadedFailed() {
@@ -183,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.setEpisodes(mEpisodes);
         mAdapter.notifyDataSetChanged();
 
+        showLastVisit();
         showLoading(false);
     }
 
@@ -190,5 +201,24 @@ public class MainActivity extends AppCompatActivity {
         mLoading.hide();
         Toast.makeText(this, "Khong the tai duoc du lieu", Toast.LENGTH_LONG).show();
         finish();
+    }
+
+    public void showLastVisit() {
+        SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
+        int epsPos = sp.getInt(EPISODE_POS, 0);
+        int epsId = sp.getInt(EPISODE_ID, -1);
+        int seaPos = sp.getInt(SEASON_POS, 0);
+
+        if (epsId != -1) {
+            if (seaPos == mSpinner.getSelectedItemPosition()) {
+                mAdapter.setCurId(epsId);
+                mRecycler.scrollToPosition(epsPos);
+            } else {
+                mAdapter.setCurId(-1);
+                mRecycler.scrollToPosition(0);
+            }
+        } else {
+            mRecycler.scrollToPosition(0);
+        }
     }
 }

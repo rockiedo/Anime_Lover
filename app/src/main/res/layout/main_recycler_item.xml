@@ -43,7 +43,10 @@
                     android:id="@+id/main_recycler_item_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/main_recycler_item_views"

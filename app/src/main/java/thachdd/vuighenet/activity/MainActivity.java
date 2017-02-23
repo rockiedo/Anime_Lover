@@ -1,6 +1,8 @@
 package thachdd.vuighenet.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private MainRecyclerAdapter mAdapter = null;
 
+    private final String MY_SP = "mysharedpreferences";
+    private final String SEASON_IDX ="seasonidx";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putInt(SEASON_IDX, position);
+                edit.commit();
+
                 loadEpisodes(mSeasons.get(position).getId());
             }
 
@@ -142,7 +151,12 @@ public class MainActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
 
-        loadEpisodes(mSeasons.get(0).getId());
+        SharedPreferences sp = getSharedPreferences(MY_SP, Context.MODE_PRIVATE);
+        int id = sp.getInt(SEASON_IDX, 0);
+
+        mSpinner.setSelection(id);
+
+//        loadEpisodes(mSeasons.get(0).getId());
     }
 
     public void onSeasonsLoadedFailed() {

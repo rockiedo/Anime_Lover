@@ -12,62 +12,10 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp">
 
-    <FrameLayout
-        android:id="@+id/groupPlayPause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp">
-
-        <ImageButton
-            android:id="@id/exo_play"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_action_play"
-            android:background="@null"/>
-
-        <ImageButton
-            android:id="@id/exo_pause"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_action_pause"
-            android:background="@null"/>
-        
-    </FrameLayout>
-
-    <ImageButton
-        android:id="@id/exo_rew"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_toLeftOf="@id/groupPlayPause"
-        android:layout_marginRight="48dp"
-        android:src="@drawable/ic_action_backward"
-        android:background="@null"/>
-
-    <ImageButton
-        android:id="@id/exo_ffwd"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_toRightOf="@id/groupPlayPause"
-        android:layout_marginLeft="48dp"
-        android:src="@drawable/ic_action_forward"
-        android:background="@null"/>
-
-    <ImageButton
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_action_rotate_screen"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:onClick="onBtnFullscreenClicked"/>
-
     <TextView
         android:id="@id/exo_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupPlayPause"
         android:layout_alignParentLeft="true"
         android:textColor="#ffffff"/>
 
@@ -75,7 +23,6 @@
         android:id="@id/exo_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/groupPlayPause"
         android:layout_alignParentRight="true"
         android:textColor="#ffffff"/>
 
@@ -83,8 +30,62 @@
         android:id="@id/exo_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/groupPlayPause"
         android:layout_toRightOf="@id/exo_position"
-        android:layout_toLeftOf="@id/exo_duration"/>
+        android:layout_toLeftOf="@id/exo_duration"
+        android:layout_marginBottom="16dp"/>
+
+    <FrameLayout
+        android:id="@+id/groupPlayPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/exo_progress"
+        android:layout_centerHorizontal="true">
+
+        <ImageButton
+            android:id="@id/exo_play"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_play"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <ImageButton
+            android:id="@id/exo_pause"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_pause"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+        
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@id/exo_rew"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_below="@id/exo_progress"
+        android:layout_toLeftOf="@id/groupPlayPause"
+        android:layout_marginRight="64dp"
+        android:src="@drawable/ic_action_backward"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <ImageButton
+        android:id="@id/exo_ffwd"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_below="@id/exo_progress"
+        android:layout_toRightOf="@id/groupPlayPause"
+        android:layout_marginLeft="64dp"
+        android:src="@drawable/ic_action_forward"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <ImageButton
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_below="@id/exo_progress"
+        android:src="@drawable/ic_action_rotate_screen"
+        android:layout_alignParentRight="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:onClick="onBtnFullscreenClicked"/>
 
 </RelativeLayout>

@@ -50,7 +50,7 @@ public class PlayerActivity extends AppCompatActivity {
     private PlayerCallback mPlayerCallback = null;
 
     private TextView mTitle = null;
-    private final int DEFAULT_DELAY = 4000;
+    private final int DEFAULT_DELAY = 3000;
     private boolean mIsShowingTitle = false;
     private final Handler mHideTitleHandle = new Handler() {
         @Override

@@ -51,6 +51,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     private TextView mTitle = null;
     private final int DEFAULT_DELAY = 4000;
+    private boolean mIsShowingTitle = false;
     private final Handler mHideTitleHandle = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -256,9 +257,18 @@ public class PlayerActivity extends AppCompatActivity {
 
     public void showTitle(boolean mode) {
         if (mode) {
-            mTitle.setVisibility(View.VISIBLE);
-            mHideTitleHandle.sendEmptyMessageDelayed(0, DEFAULT_DELAY);
+            if (!mIsShowingTitle) {
+                mIsShowingTitle = true;
+
+                Animation anim = AnimationUtils.loadAnimation(this, R.anim.fade_in_anim);
+                mTitle.startAnimation(anim);
+
+                mTitle.setVisibility(View.VISIBLE);
+                mHideTitleHandle.sendEmptyMessageDelayed(0, DEFAULT_DELAY);
+            }
         } else {
+            mIsShowingTitle = false;
+
             Animation anim = AnimationUtils.loadAnimation(this, R.anim.fade_out_anim);
             mTitle.startAnimation(anim);
             mTitle.setVisibility(View.GONE);
